@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:yamahadelsur.com)",
+      "Bash(npm install)",
+      "Bash(node server.js:*)",
+      "Bash(timeout:*)",
+      "Bash(git init:*)",
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\n🏍️ Initial commit: Yamaha Image Scraper\n\n- Node.js + Express + Puppeteer scraper\n- Extrae 145 imágenes de yamahadelsur.com\n- Interfaz web moderna con galería\n- API REST con caché inteligente\n- Filtros, búsqueda y exportación\n- Scroll automático para lazy loading\n\nCo-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git branch:*)",
+      "Bash(git remote add:*)",
+      "Bash(git push:*)",
+      "Bash(git commit:*)"
+    ]
+  }
+}
