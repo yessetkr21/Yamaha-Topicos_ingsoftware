@@ -60,21 +60,82 @@ async function extraerImagenes(url) {
             const imagenesSet = new Set();
             const imageData = [];
 
+            function esImagenMoto(url, alt, width, height, clase) {
+                // Ignorar URLs vacías, data URIs y muy pequeñas
+                if (!url || url.length < 10 || url.startsWith('data:')) {
+                    return false;
+                }
+
+                const urlLower = url.toLowerCase();
+                const altLower = (alt || '').toLowerCase();
+                const claseLower = (clase || '').toLowerCase();
+
+                // FILTRAR BASURA - Rechazar logos, íconos, banners
+                const basuraPatterns = [
+                    'logo', 'icon', 'banner', 'header', 'footer', 'menu',
+                    'button', 'arrow', 'social', 'whatsapp', 'facebook',
+                    'instagram', 'youtube', 'email', 'phone', 'favicon',
+                    'sprite', 'thumbnail-small', 'avatar', 'badge'
+                ];
+
+                if (basuraPatterns.some(pattern =>
+                    urlLower.includes(pattern) ||
+                    altLower.includes(pattern) ||
+                    claseLower.includes(pattern)
+                )) {
+                    return false;
+                }
+
+                // Rechazar imágenes muy pequeñas (logos e íconos suelen ser pequeños)
+                if (width && height) {
+                    const w = parseInt(width);
+                    const h = parseInt(height);
+                    // Las motos suelen ser imágenes de al menos 300x300
+                    if (w < 300 || h < 300) {
+                        return false;
+                    }
+                }
+
+                // ACEPTAR MOTOS - Buscar palabras clave relacionadas con motos
+                const motoKeywords = [
+                    'yamaha', 'moto', 'motorcycle', 'bike', 'scooter',
+                    'nmax', 'mt', 'r15', 'fz', 'xtz', 'yzf', 'tenere',
+                    'fazer', 'crypton', 'xsr', 'tracer', 'aerox'
+                ];
+
+                const tienePalabraMoto = motoKeywords.some(keyword =>
+                    urlLower.includes(keyword) ||
+                    altLower.includes(keyword) ||
+                    claseLower.includes(keyword)
+                );
+
+                // Si tiene palabra clave de moto, aceptar
+                if (tienePalabraMoto) {
+                    return true;
+                }
+
+                // Si la imagen es grande (probablemente producto) y no es basura, aceptar
+                if (width && height) {
+                    const w = parseInt(width);
+                    const h = parseInt(height);
+                    if (w >= 500 && h >= 400) {
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+
             function agregarImagen(url, alt, tipo, width, height, clase) {
-                // Ignorar URLs vacías, muy pequeñas y placeholders
-                if (!url || url.length < 10 || url.includes('data:image/gif;base64,R0lGOD')) {
-                    return;
-                }
-
-                // Ignorar SVGs inline muy pequeños
-                if (url.startsWith('data:image/svg') && url.length < 200) {
-                    return;
-                }
-
                 // Convertir URLs relativas a absolutas
                 try {
                     url = new URL(url, window.location.href).href;
                 } catch (e) {
+                    return;
+                }
+
+                // Filtrar solo imágenes de motos
+                if (!esImagenMoto(url, alt, width, height, clase)) {
                     return;
                 }
 
