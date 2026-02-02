@@ -53,9 +53,9 @@ async function extraerImagenes(url) {
         // Esperar un poco más para que carguen las imágenes
         await page.waitForTimeout(3000);
 
-        console.log('🔍 Extrayendo imágenes...');
+        console.log('🔍 Extrayendo imágenes y productos...');
 
-        // Extraer todas las imágenes
+        // Extraer todas las imágenes y datos de productos
         const imagenes = await page.evaluate(() => {
             const imagenesSet = new Set();
             const imageData = [];
@@ -169,10 +169,40 @@ async function extraerImagenes(url) {
                 });
             });
 
-            return imageData;
+            // Extraer información de productos/motos
+            const productos = [];
+
+            // Buscar cards de productos, secciones de motos, etc.
+            document.querySelectorAll('article, .product, .motorcycle, [class*="card"], [class*="product"], [class*="bike"]').forEach(element => {
+                const titulo = element.querySelector('h1, h2, h3, h4, .title, [class*="title"], [class*="name"]')?.textContent?.trim();
+                const descripcion = element.querySelector('p, .description, [class*="description"], [class*="desc"]')?.textContent?.trim();
+                const precio = element.querySelector('.price, [class*="price"], [class*="cost"]')?.textContent?.trim();
+                const imagen = element.querySelector('img')?.src;
+
+                if (titulo || descripcion || imagen) {
+                    productos.push({
+                        titulo: titulo || 'Sin título',
+                        descripcion: descripcion || 'Sin descripción',
+                        precio: precio || null,
+                        imagen: imagen ? new URL(imagen, window.location.href).href : null
+                    });
+                }
+            });
+
+            // También buscar en cualquier elemento con texto que parezca nombre de moto
+            const textos = Array.from(document.querySelectorAll('h1, h2, h3, h4, strong, b')).map(el => ({
+                texto: el.textContent.trim(),
+                imagen: el.closest('div, article, section')?.querySelector('img')?.src
+            })).filter(item => item.texto && item.texto.length > 3 && item.texto.length < 100);
+
+            return { imageData, productos, textos };
         });
 
-        console.log(`✅ Se encontraron ${imagenes.length} imágenes`);
+        const { imageData, productos, textos } = imagenes;
+
+        console.log(`✅ Se encontraron ${imageData.length} imágenes`);
+        console.log(`📦 Se encontraron ${productos.length} productos`);
+        console.log(`📝 Se encontraron ${textos.length} textos relevantes`);
 
         // Agrupar por tipo
         const porTipo = imagenes.reduce((acc, img) => {
@@ -182,7 +212,12 @@ async function extraerImagenes(url) {
 
         console.log('📊 Desglose por tipo:', porTipo);
 
-        return imagenes;
+        return {
+            imagenes: imageData,
+            productos,
+            textos,
+            total: imageData.length
+        };
 
     } catch (error) {
         console.error('❌ Error durante el scraping:', error);
@@ -226,23 +261,23 @@ app.get('/api/imagenes', async (req, res) => {
             return res.json({
                 success: true,
                 cached: true,
-                total: cachedImages.length,
+                total: cachedImages.total || cachedImages.imagenes?.length || 0,
                 data: cachedImages
             });
         }
 
         // Extraer nuevas imágenes
-        const imagenes = await extraerImagenes('https://yamahadelsur.com/');
+        const datos = await extraerImagenes('https://yamahadelsur.com/');
 
         // Guardar en cache
-        cachedImages = imagenes;
+        cachedImages = datos;
         lastFetch = ahora;
 
         res.json({
             success: true,
             cached: false,
-            total: imagenes.length,
-            data: imagenes
+            total: datos.total,
+            data: datos
         });
 
     } catch (error) {
@@ -258,15 +293,15 @@ app.get('/api/imagenes', async (req, res) => {
 app.get('/api/imagenes/refresh', async (req, res) => {
     try {
         console.log('🔄 Forzando actualización...');
-        const imagenes = await extraerImagenes('https://yamahadelsur.com/');
+        const datos = await extraerImagenes('https://yamahadelsur.com/');
 
-        cachedImages = imagenes;
+        cachedImages = datos;
         lastFetch = Date.now();
 
         res.json({
             success: true,
-            total: imagenes.length,
-            data: imagenes
+            total: datos.total,
+            data: datos
         });
 
     } catch (error) {
@@ -287,12 +322,14 @@ app.get('/api/stats', (req, res) => {
         });
     }
 
+    const imagenes = cachedImages.imagenes || cachedImages;
     const stats = {
-        total: cachedImages.length,
-        porTipo: cachedImages.reduce((acc, img) => {
+        total: Array.isArray(imagenes) ? imagenes.length : cachedImages.total,
+        productos: cachedImages.productos?.length || 0,
+        porTipo: Array.isArray(imagenes) ? imagenes.reduce((acc, img) => {
             acc[img.tipo] = (acc[img.tipo] || 0) + 1;
             return acc;
-        }, {}),
+        }, {}) : {},
         lastUpdate: new Date(lastFetch).toISOString()
     };
 
