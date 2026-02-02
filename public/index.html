@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yamaha del Sur - Catálogo de Motos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .gradient-bg {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        }
+
+        .card-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .card-hover:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.3), 0 8px 10px -6px rgb(0 0 0 / 0.3);
+        }
+
+        .shimmer {
+            background: linear-gradient(90deg, #334155 25%, #475569 50%, #334155 75%);
+            background-size: 200% 100%;
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        .badge {
+            @apply inline-flex items-center rounded-full px-3 py-1 text-xs font-medium ring-1 ring-inset;
+        }
+
+        .badge-primary {
+            @apply bg-blue-500/10 text-blue-400 ring-blue-500/20;
+        }
+
+        .badge-secondary {
+            @apply bg-slate-500/10 text-slate-400 ring-slate-500/20;
+        }
+
+        .btn {
+            @apply inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50;
+        }
+
+        .btn-primary {
+            @apply bg-blue-600 text-white hover:bg-blue-700 h-10 px-4 py-2;
+        }
+
+        .btn-secondary {
+            @apply bg-slate-700 text-slate-100 hover:bg-slate-600 h-10 px-4 py-2;
+        }
+
+        .btn-ghost {
+            @apply hover:bg-slate-800 hover:text-slate-100 h-10 px-4 py-2;
+        }
+
+        .input {
+            @apply flex h-10 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20;
+        }
+
+        .modal-overlay {
+            backdrop-filter: blur(8px);
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #1e293b;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #475569;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #64748b;
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 antialiased">
+    <!-- Header -->
+    <header class="sticky top-0 z-50 w-full border-b border-slate-800 bg-slate-950/95 backdrop-blur supports-[backdrop-filter]:bg-slate-950/60">
+        <div class="container mx-auto flex h-16 items-center justify-between px-4">
+            <div class="flex items-center gap-4">
+                <h1 class="text-2xl font-bold bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent">
+                    🏍️ Yamaha del Sur
+                </h1>
+            </div>
+            <nav class="flex items-center gap-4">
+                <button onclick="refrescarDatos()" class="btn btn-ghost">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                    </svg>
+                    Refrescar
+                </button>
+                <button onclick="toggleView()" class="btn btn-ghost">
+                    <svg id="viewIcon" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/>
+                    </svg>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Loading -->
+    <div id="loading" class="min-h-screen flex items-center justify-center">
+        <div class="text-center">
+            <div class="inline-block h-16 w-16 animate-spin rounded-full border-4 border-solid border-blue-500 border-r-transparent mb-4"></div>
+            <h2 class="text-xl font-semibold mb-2">Cargando catálogo</h2>
+            <p class="text-slate-400">Extrayendo información de yamahadelsur.com...</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main id="content" class="hidden">
+        <!-- Stats -->
+        <section class="border-b border-slate-800 bg-slate-900/50">
+            <div class="container mx-auto px-4 py-8">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4" id="stats"></div>
+            </div>
+        </section>
+
+        <!-- Filters -->
+        <section class="border-b border-slate-800 bg-slate-900/30">
+            <div class="container mx-auto px-4 py-6">
+                <div class="flex flex-col md:flex-row gap-4">
+                    <div class="flex-1">
+                        <input type="text" id="searchInput" placeholder="🔍 Buscar motos, modelos, descripciones..." class="input w-full">
+                    </div>
+                    <select id="typeFilter" class="input md:w-48">
+                        <option value="all">Todos los tipos</option>
+                    </select>
+                    <button onclick="exportarJSON()" class="btn btn-secondary">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                        </svg>
+                        Exportar JSON
+                    </button>
+                    <button onclick="exportarCSV()" class="btn btn-secondary">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                        </svg>
+                        Exportar CSV
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Gallery -->
+        <section class="container mx-auto px-4 py-12">
+            <div id="gallery" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
+
+            <div id="emptyState" class="hidden text-center py-20">
+                <svg class="mx-auto h-12 w-12 text-slate-600 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/>
+                </svg>
+                <h3 class="text-lg font-medium text-slate-300 mb-2">No se encontraron resultados</h3>
+                <p class="text-slate-500">Intenta ajustar los filtros de búsqueda</p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal -->
+    <div id="modal" class="hidden fixed inset-0 z-50 modal-overlay bg-black/80" onclick="cerrarModal()">
+        <div class="flex min-h-screen items-center justify-center p-4">
+            <div class="relative max-w-7xl max-h-[90vh]" onclick="event.stopPropagation()">
+                <button onclick="cerrarModal()" class="absolute -top-12 right-0 text-white hover:text-slate-300 transition">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+                <img id="modalImage" src="" alt="" class="max-w-full max-h-[90vh] rounded-lg">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let datosCompletos = null;
+        let imagenesFiltradas = [];
+        let vistaGrid = true;
+
+        async function cargarDatos(forceRefresh = false) {
+            const url = forceRefresh ? '/api/imagenes/refresh' : '/api/imagenes';
+
+            document.getElementById('loading').classList.remove('hidden');
+            document.getElementById('content').classList.add('hidden');
+
+            try {
+                const response = await fetch(url);
+                const result = await response.json();
+
+                if (result.success) {
+                    datosCompletos = result.data;
+                    imagenesFiltradas = datosCompletos.imagenes || datosCompletos;
+
+                    actualizarEstadisticas(result);
+                    actualizarFiltros();
+                    mostrarGaleria();
+
+                    document.getElementById('loading').classList.add('hidden');
+                    document.getElementById('content').classList.remove('hidden');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error al cargar los datos: ' + error.message);
+            }
+        }
+
+        function actualizarEstadisticas(result) {
+            const imagenes = Array.isArray(datosCompletos) ? datosCompletos : (datosCompletos.imagenes || []);
+            const porTipo = imagenes.reduce((acc, img) => {
+                acc[img.tipo] = (acc[img.tipo] || 0) + 1;
+                return acc;
+            }, {});
+
+            const stats = [
+                { label: 'Total Imágenes', value: result.total || imagenes.length, icon: '🖼️', color: 'blue' },
+                { label: 'IMG Tags', value: porTipo['IMG tag'] || 0, icon: '📸', color: 'green' },
+                { label: 'Backgrounds', value: porTipo['Background CSS'] || 0, icon: '🎨', color: 'purple' },
+                { label: 'Estado', value: result.cached ? 'Cache' : 'Nuevo', icon: result.cached ? '📦' : '🆕', color: 'yellow' }
+            ];
+
+            document.getElementById('stats').innerHTML = stats.map(stat => `
+                <div class="rounded-lg border border-slate-800 bg-slate-900/50 p-6 backdrop-blur">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-slate-400">${stat.label}</p>
+                            <p class="text-3xl font-bold mt-2">${stat.value}</p>
+                        </div>
+                        <div class="text-4xl">${stat.icon}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function actualizarFiltros() {
+            const imagenes = Array.isArray(datosCompletos) ? datosCompletos : (datosCompletos.imagenes || []);
+            const tipos = [...new Set(imagenes.map(img => img.tipo))];
+
+            const select = document.getElementById('typeFilter');
+            select.innerHTML = '<option value="all">Todos los tipos</option>' +
+                tipos.map(tipo => `<option value="${tipo}">${tipo}</option>`).join('');
+        }
+
+        function mostrarGaleria() {
+            const gallery = document.getElementById('gallery');
+            const empty = document.getElementById('emptyState');
+
+            if (imagenesFiltradas.length === 0) {
+                gallery.classList.add('hidden');
+                empty.classList.remove('hidden');
+                return;
+            }
+
+            gallery.classList.remove('hidden');
+            empty.classList.add('hidden');
+
+            gallery.innerHTML = imagenesFiltradas.map((img, index) => `
+                <div class="group rounded-lg border border-slate-800 bg-slate-900/50 overflow-hidden card-hover backdrop-blur">
+                    <div class="aspect-video bg-slate-800 relative overflow-hidden">
+                        <img src="${img.url}"
+                             alt="${img.alt}"
+                             loading="lazy"
+                             onclick="abrirModal('${img.url.replace(/'/g, "\\'")}')"
+                             class="w-full h-full object-cover cursor-pointer transition-transform duration-300 group-hover:scale-110"
+                             onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'400\\' height=\\'300\\'%3E%3Crect fill=\\'%23334155\\' width=\\'400\\' height=\\'300\\'/%3E%3Ctext fill=\\'%2364748b\\' x=\\'50%25\\' y=\\'50%25\\' dominant-baseline=\\'middle\\' text-anchor=\\'middle\\' font-family=\\'sans-serif\\' font-size=\\'16\\'%3EError al cargar%3C/text%3E%3C/svg%3E'">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    </div>
+                    <div class="p-4">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="badge badge-primary">${img.tipo}</span>
+                        </div>
+                        <h3 class="font-semibold text-slate-100 mb-1 line-clamp-2">${img.alt}</h3>
+                        <p class="text-sm text-slate-400 mb-1">📐 ${img.width} × ${img.height}</p>
+                        <p class="text-xs text-slate-500 line-clamp-1 mb-3">${img.url}</p>
+                        <div class="flex gap-2">
+                            <button onclick="abrirModal('${img.url.replace(/'/g, "\\'")}')" class="btn btn-primary flex-1 text-xs">
+                                <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                                </svg>
+                                Ver
+                            </button>
+                            <button onclick="copiarURL('${img.url.replace(/'/g, "\\'")}', event)" class="btn btn-secondary text-xs">
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                                </svg>
+                            </button>
+                            <button onclick="descargarImagen('${img.url.replace(/'/g, "\\'")}')" class="btn btn-secondary text-xs">
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function aplicarFiltros() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const typeFilter = document.getElementById('typeFilter').value;
+            const imagenes = Array.isArray(datosCompletos) ? datosCompletos : (datosCompletos.imagenes || []);
+
+            imagenesFiltradas = imagenes.filter(img => {
+                const matchSearch = img.url.toLowerCase().includes(searchTerm) ||
+                                  img.alt.toLowerCase().includes(searchTerm);
+                const matchType = typeFilter === 'all' || img.tipo === typeFilter;
+                return matchSearch && matchType;
+            });
+
+            mostrarGaleria();
+        }
+
+        function refrescarDatos() {
+            if (confirm('¿Quieres refrescar los datos? Esto tomará unos segundos.')) {
+                cargarDatos(true);
+            }
+        }
+
+        function toggleView() {
+            vistaGrid = !vistaGrid;
+            const gallery = document.getElementById('gallery');
+            gallery.className = vistaGrid
+                ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6'
+                : 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6';
+        }
+
+        function abrirModal(url) {
+            document.getElementById('modalImage').src = url;
+            document.getElementById('modal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function cerrarModal() {
+            document.getElementById('modal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        function copiarURL(url, event) {
+            event.stopPropagation();
+            navigator.clipboard.writeText(url).then(() => {
+                const btn = event.currentTarget;
+                const originalHTML = btn.innerHTML;
+                btn.innerHTML = '<svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>';
+                btn.classList.add('bg-green-600');
+                setTimeout(() => {
+                    btn.innerHTML = originalHTML;
+                    btn.classList.remove('bg-green-600');
+                }, 1500);
+            });
+        }
+
+        function descargarImagen(url) {
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = url.split('/').pop();
+            a.target = '_blank';
+            a.click();
+        }
+
+        function exportarJSON() {
+            const json = JSON.stringify(datosCompletos, null, 2);
+            const blob = new Blob([json], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'yamaha-catalogo.json';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function exportarCSV() {
+            const imagenes = Array.isArray(datosCompletos) ? datosCompletos : (datosCompletos.imagenes || []);
+            const csv = [
+                ['URL', 'Alt Text', 'Tipo', 'Ancho', 'Alto'].join(','),
+                ...imagenes.map(img => [
+                    `"${img.url}"`,
+                    `"${img.alt}"`,
+                    `"${img.tipo}"`,
+                    img.width,
+                    img.height
+                ].join(','))
+            ].join('\n');
+
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'yamaha-catalogo.csv';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // Event listeners
+        document.getElementById('searchInput').addEventListener('input', aplicarFiltros);
+        document.getElementById('typeFilter').addEventListener('change', aplicarFiltros);
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') cerrarModal();
+        });
+
+        // Cargar datos al inicio
+        window.addEventListener('load', () => cargarDatos());
+    </script>
+</body>
+</html>
