@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ moto.nombre }} - Yamaha{% endblock %}
+
+{% block content %}
+<section class="py-12">
+    <div class="container mx-auto px-4">
+        <div class="max-w-6xl mx-auto bg-white rounded-lg shadow-xl overflow-hidden">
+            <div class="md:flex">
+                <!-- Imagen -->
+                <div class="md:w-1/2 bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center p-8">
+                    {% if moto.imagen %}
+                    <img src="{{ moto.imagen.url }}" alt="{{ moto.nombre }}" class="w-full h-auto object-contain">
+                    {% else %}
+                    <span class="text-9xl">🏍️</span>
+                    {% endif %}
+                </div>
+
+                <!-- Detalles -->
+                <div class="md:w-1/2 p-8">
+                    <div class="text-sm text-purple-600 font-semibold mb-2">
+                        {{ moto.get_categoria_display }}
+                    </div>
+                    <h1 class="text-4xl font-bold mb-4 text-gray-800">{{ moto.nombre }}</h1>
+
+                    <div class="mb-6">
+                        <span class="text-4xl font-black text-purple-600">{{ moto.precio_formateado }}</span>
+                    </div>
+
+                    <div class="space-y-4 mb-8">
+                        <div class="flex items-center border-b pb-3">
+                            <span class="text-gray-600 w-32">Cilindrada:</span>
+                            <span class="font-bold text-gray-800">{{ moto.cilindrada }}cc</span>
+                        </div>
+                        <div class="flex items-center border-b pb-3">
+                            <span class="text-gray-600 w-32">Categoría:</span>
+                            <span class="font-bold text-gray-800">{{ moto.get_categoria_display }}</span>
+                        </div>
+                        <div class="flex items-center border-b pb-3">
+                            <span class="text-gray-600 w-32">Disponibilidad:</span>
+                            <span class="{% if moto.disponible %}text-green-600{% else %}text-red-600{% endif %} font-bold">
+                                {% if moto.disponible %}Disponible{% else %}No disponible{% endif %}
+                            </span>
+                        </div>
+                    </div>
+
+                    {% if moto.descripcion %}
+                    <div class="mb-8">
+                        <h2 class="text-xl font-bold mb-3 text-gray-800">Descripción</h2>
+                        <p class="text-gray-600 leading-relaxed">{{ moto.descripcion }}</p>
+                    </div>
+                    {% endif %}
+
+                    <div class="flex gap-4">
+                        <button class="flex-1 bg-purple-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-purple-700 transition">
+                            Contactar
+                        </button>
+                        <a href="{% url 'moto-lista' %}"
+                           class="flex-1 border-2 border-purple-600 text-purple-600 px-6 py-3 rounded-lg font-bold text-center hover:bg-purple-50 transition">
+                            Ver Más Motos
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
