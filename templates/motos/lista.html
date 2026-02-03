@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block title %}Catálogo de Motos - Yamaha{% endblock %}
+
+{% block content %}
+<section class="py-12">
+    <div class="container mx-auto px-4">
+        <h1 class="text-4xl font-bold text-center mb-8 text-gray-800">
+            Nuestro Catálogo
+        </h1>
+
+        <!-- Filtros -->
+        <div class="mb-8 flex flex-wrap gap-4 justify-center">
+            <a href="{% url 'moto-lista' %}"
+               class="px-6 py-2 rounded-full {% if not categoria_actual %}bg-purple-600 text-white{% else %}bg-gray-200 text-gray-700 hover:bg-gray-300{% endif %} transition">
+                Todas
+            </a>
+            {% for codigo, nombre in categorias %}
+            <a href="{% url 'moto-lista' %}?categoria={{ codigo }}"
+               class="px-6 py-2 rounded-full {% if categoria_actual == codigo %}bg-purple-600 text-white{% else %}bg-gray-200 text-gray-700 hover:bg-gray-300{% endif %} transition">
+                {{ nombre }}
+            </a>
+            {% endfor %}
+        </div>
+
+        <!-- Grid de Motos -->
+        {% if motos %}
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {% for moto in motos %}
+            <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-2xl transition transform hover:-translate-y-2">
+                <div class="h-48 bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center">
+                    {% if moto.imagen %}
+                    <img src="{{ moto.imagen.url }}" alt="{{ moto.nombre }}" class="w-full h-full object-cover">
+                    {% else %}
+                    <span class="text-6xl">🏍️</span>
+                    {% endif %}
+                </div>
+                <div class="p-4">
+                    <div class="text-xs text-purple-600 font-semibold mb-1">
+                        {{ moto.get_categoria_display }}
+                    </div>
+                    <h3 class="text-lg font-bold mb-2 text-gray-800">{{ moto.nombre }}</h3>
+                    <p class="text-sm text-gray-600 mb-3">{{ moto.cilindrada }}cc</p>
+                    <div class="flex items-center justify-between">
+                        <span class="text-xl font-bold text-purple-600">{{ moto.precio_formateado }}</span>
+                        <a href="{% url 'moto-detail' moto.pk %}"
+                           class="bg-purple-600 text-white px-3 py-1 rounded text-sm hover:bg-purple-700 transition">
+                            Ver
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="text-center text-gray-500 py-12">
+            <p class="text-xl">No se encontraron motos en esta categoría.</p>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+
+{% block title %}Yamaha Motos - Inicio{% endblock %}
+
+{% load static %}
+
+{% block content %}
+<!-- Hero Section con Banner -->
+<section class="relative h-[600px] md:h-[700px] overflow-hidden">
+    <!-- Banner de fondo -->
+    <div class="absolute inset-0">
+        <img src="{% static 'images/banner.jpg' %}"
+             alt="Yamaha Motos Banner"
+             class="w-full h-full object-cover parallax-slow scale-105">
+        <!-- Overlay con gradiente -->
+        <div class="absolute inset-0 bg-gradient-to-r from-black via-transparent to-black opacity-60"></div>
+        <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black opacity-70"></div>
+    </div>
+
+    <!-- Contenido sobre el banner -->
+    <div class="relative z-10 container mx-auto px-4 h-full flex flex-col justify-center items-center text-center text-white">
+        <h1 class="text-5xl md:text-8xl font-black mb-6 drop-shadow-2xl animate-fade-in-up tracking-tight">
+            YAMAHA MOTOS
+        </h1>
+        <p class="text-xl md:text-3xl mb-10 font-light drop-shadow-lg animate-fade-in-up animate-delay-1 max-w-3xl">
+            Velocidad, estilo y potencia en cada curva
+        </p>
+        <a href="{% url 'moto-lista' %}"
+           class="animate-fade-in-up animate-delay-2 inline-block bg-white text-gray-900 px-12 py-5 rounded-full font-bold text-lg hover:bg-gray-100 transition-all duration-300 transform hover:scale-110 hover:shadow-2xl">
+            Explorar Catálogo →
+        </a>
+    </div>
+
+    <!-- Scroll indicator -->
+    <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+        <svg class="w-8 h-8 text-white opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+        </svg>
+    </div>
+</section>
+
+<!-- Categorías -->
+<section class="py-20 bg-gradient-to-b from-white to-gray-50">
+    <div class="container mx-auto px-4">
+        <h2 class="text-4xl md:text-5xl font-black text-center mb-4 text-gray-900">
+            Explora por Categoría
+        </h2>
+        <p class="text-center text-gray-600 mb-12 text-lg">
+            Encuentra la moto perfecta para tu estilo de vida
+        </p>
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+            {% for codigo, nombre in categorias %}
+            <a href="{% url 'moto-lista' %}?categoria={{ codigo }}"
+               class="group relative bg-gradient-to-br from-purple-600 to-indigo-700 text-white p-8 rounded-2xl text-center hover:shadow-2xl transition-all duration-300 transform hover:scale-110 hover:-translate-y-2 overflow-hidden">
+                <!-- Efecto de brillo al hover -->
+                <div class="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
+
+                <div class="relative z-10">
+                    <div class="text-5xl mb-3">🏍️</div>
+                    <div class="font-bold text-lg">{{ nombre }}</div>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Motos Destacadas -->
+<section class="py-20 bg-white">
+    <div class="container mx-auto px-4">
+        <h2 class="text-4xl md:text-5xl font-black text-center mb-4 text-gray-900">
+            Motos Destacadas
+        </h2>
+        <p class="text-center text-gray-600 mb-12 text-lg">
+            Las mejores opciones para empezar tu aventura
+        </p>
+
+        {% if motos_destacadas %}
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {% for moto in motos_destacadas %}
+            <div class="group bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-3">
+                <div class="relative h-56 bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center overflow-hidden">
+                    {% if moto.imagen %}
+                    <img src="{{ moto.imagen.url }}" alt="{{ moto.nombre }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    {% else %}
+                    <span class="text-6xl group-hover:scale-110 transition-transform duration-300">🏍️</span>
+                    {% endif %}
+                    <!-- Badge de categoría -->
+                    <div class="absolute top-4 right-4 bg-purple-600 text-white px-3 py-1 rounded-full text-xs font-bold">
+                        {{ moto.get_categoria_display }}
+                    </div>
+                </div>
+                <div class="p-6">
+                    <h3 class="text-2xl font-bold mb-2 text-gray-900 group-hover:text-purple-600 transition-colors">
+                        {{ moto.nombre }}
+                    </h3>
+                    <p class="text-gray-600 mb-4 flex items-center">
+                        <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
+                            <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/>
+                        </svg>
+                        {{ moto.cilindrada }}cc
+                    </p>
+                    <div class="flex items-center justify-between">
+                        <span class="text-3xl font-black text-purple-600">{{ moto.precio_formateado }}</span>
+                        <a href="{% url 'moto-detail' moto.pk %}"
+                           class="bg-purple-600 text-white px-6 py-3 rounded-xl font-bold hover:bg-purple-700 transition-all transform hover:scale-105 shadow-md">
+                            Ver Más
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="text-center text-gray-500 py-12">
+            <p class="text-xl">No hay motos disponibles por el momento.</p>
+            <p class="mt-2">Pronto agregaremos nuestro catálogo completo.</p>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}
