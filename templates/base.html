@@ -1,80 +1,425 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Yamaha Motos{% endblock %}</title>
+    <meta name="description" content="Yamaha Motorcycles - Distribuidor oficial de motocicletas Yamaha. Encuentra tu moto ideal.">
+    <title>{% block title %}Yamaha Motorcycles{% endblock %}</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS + DaisyUI -->
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.6.0/dist/full.min.css" rel="stylesheet" type="text/css" />
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Alpine.js -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    
+    <!-- AOS (Animate On Scroll) -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    
+    <!-- Custom CSS -->
+    {% load static %}
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap');
+        :root {
+            --yamaha-red: #E60012;
+            --yamaha-black: #000000;
+        }
+        
         body {
             font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
         }
-        .gradient-bg {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        
+        /* Yamaha Custom Theme for DaisyUI */
+        [data-theme="light"] {
+            --p: 0 100% 45%;
+            --pf: 0 100% 35%;
+            --pc: 0 0% 100%;
+            --s: 0 0% 10%;
+            --sf: 0 0% 5%;
+            --sc: 0 0% 100%;
+            --a: 0 0% 15%;
+            --af: 0 0% 10%;
+            --ac: 0 0% 100%;
+            --n: 0 0% 10%;
+            --nf: 0 0% 5%;
+            --nc: 0 0% 100%;
+            --b1: 0 0% 100%;
+            --b2: 0 0% 98%;
+            --b3: 0 0% 95%;
+            --bc: 0 0% 20%;
         }
-
-        /* Animaciones suaves */
+        
+        /* Premium Navbar */
+        .navbar-yamaha {
+            background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        /* Glass morphism effect */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        /* Yamaha Red Gradient */
+        .bg-yamaha-gradient {
+            background: linear-gradient(135deg, #E60012 0%, #C50010 100%);
+        }
+        
+        /* Premium Button */
+        .btn-yamaha {
+            background: linear-gradient(135deg, var(--yamaha-red) 0%, #C50010 100%);
+            border: none;
+            color: white;
+            font-weight: 700;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-yamaha::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+        
+        .btn-yamaha:hover::before {
+            left: 100%;
+        }
+        
+        .btn-yamaha:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(230, 0, 18, 0.4);
+        }
+        
+        /* Card Hover Effects */
+        .card-hover {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-12px) scale(1.02);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* Image Zoom on Hover */
+        .img-zoom {
+            overflow: hidden;
+        }
+        
+        .img-zoom img {
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .img-zoom:hover img {
+            transform: scale(1.15);
+        }
+        
+        /* Smooth Scroll */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* WhatsApp Float with Animation */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 24px rgba(37, 211, 102, 0.4);
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 999;
+            animation: pulse-whatsapp 2s infinite;
+        }
+        
+        @keyframes pulse-whatsapp {
+            0%, 100% {
+                box-shadow: 0 8px 24px rgba(37, 211, 102, 0.4);
+            }
+            50% {
+                box-shadow: 0 8px 32px rgba(37, 211, 102, 0.6);
+            }
+        }
+        
+        .whatsapp-float:hover {
+            transform: scale(1.15) rotate(5deg);
+            box-shadow: 0 12px 36px rgba(37, 211, 102, 0.6);
+        }
+        
+        .whatsapp-float svg {
+            width: 36px;
+            height: 36px;
+            fill: white;
+        }
+        
+        /* Hero Text Animation */
+        .hero-text {
+            animation: fadeInUp 1s ease-out;
+        }
+        
         @keyframes fadeInUp {
             from {
                 opacity: 0;
-                transform: translateY(30px);
+                transform: translateY(40px);
             }
             to {
                 opacity: 1;
                 transform: translateY(0);
             }
         }
-
-        .animate-fade-in-up {
-            animation: fadeInUp 0.8s ease-out forwards;
+        
+        /* Gradient Text */
+        .text-gradient {
+            background: linear-gradient(135deg, #E60012 0%, #FF4444 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
-
-        .animate-delay-1 {
-            animation-delay: 0.2s;
+        
+        /* Stats Counter Animation */
+        .stat-number {
+            font-variant-numeric: tabular-nums;
+        }
+        
+        /* Category Card Hover */
+        .category-card {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .category-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(230, 0, 18, 0.8), rgba(197, 0, 16, 0.9));
             opacity: 0;
+            transition: opacity 0.4s;
         }
-
-        .animate-delay-2 {
-            animation-delay: 0.4s;
-            opacity: 0;
+        
+        .category-card:hover::before {
+            opacity: 1;
         }
-
-        /* Efecto parallax suave */
-        .parallax-slow {
-            transition: transform 0.5s ease-out;
+        
+        .category-card:hover {
+            transform: translateY(-8px);
+        }
+        
+        /* Loading Skeleton */
+        .skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+        
+        @keyframes loading {
+            0% {
+                background-position: 200% 0;
+            }
+            100% {
+                background-position: -200% 0;
+            }
+        }
+        
+        /* Navbar Scroll Effect */
+        .navbar-scrolled {
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Badge Pulse */
+        .badge-pulse {
+            animation: badge-pulse 2s infinite;
+        }
+        
+        @keyframes badge-pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
         }
     </style>
+    
+    {% block extra_css %}{% endblock %}
 </head>
-<body class="bg-gray-50">
-    <!-- Navbar -->
-    <nav class="gradient-bg text-white shadow-lg">
-        <div class="container mx-auto px-4">
-            <div class="flex items-center justify-between py-4">
-                <a href="{% url 'home' %}" class="text-2xl font-bold flex items-center space-x-2">
-                    <span>🏍️</span>
-                    <span>YAMAHA</span>
-                </a>
-                <div class="hidden md:flex space-x-6">
-                    <a href="{% url 'home' %}" class="hover:text-gray-200 transition">Inicio</a>
-                    <a href="{% url 'moto-lista' %}" class="hover:text-gray-200 transition">Motos</a>
+<body class="bg-base-100" x-data="{ mobileMenuOpen: false, scrolled: false }" 
+      @scroll.window="scrolled = window.pageYOffset > 50">
+    
+    <!-- Premium Navigation Bar with Alpine.js -->
+    <div class="navbar navbar-yamaha text-white shadow-lg sticky top-0 z-50 transition-all duration-300"
+         :class="{ 'navbar-scrolled': scrolled }">
+        <div class="container mx-auto">
+            <div class="navbar-start">
+                <div class="dropdown">
+                    <div tabindex="0" role="button" class="btn btn-ghost lg:hidden" @click="mobileMenuOpen = !mobileMenuOpen">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16" />
+                        </svg>
+                    </div>
+                    <ul x-show="mobileMenuOpen" 
+                        x-transition:enter="transition ease-out duration-200"
+                        x-transition:enter-start="opacity-0 transform scale-95"
+                        x-transition:enter-end="opacity-100 transform scale-100"
+                        x-transition:leave="transition ease-in duration-150"
+                        x-transition:leave-start="opacity-100 transform scale-100"
+                        x-transition:leave-end="opacity-0 transform scale-95"
+                        tabindex="0" 
+                        class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow-xl text-black">
+                        <li><a href="{% url 'home' %}" class="font-semibold">Inicio</a></li>
+                        <li><a href="{% url 'moto-lista' %}" class="font-semibold">Motos</a></li>
+                        <li><a href="#servicios" class="font-semibold">Servicios</a></li>
+                        <li><a href="#contacto" class="font-semibold">Contacto</a></li>
+                    </ul>
                 </div>
+                <a href="{% url 'home' %}" class="btn btn-ghost text-xl font-black hover:scale-105 transition-transform">
+                    <img src="{% static 'images/logo-yamaha.png' %}" alt="Yamaha" class="h-10 w-auto">
+                </a>
+            </div>
+            
+            <div class="navbar-center hidden lg:flex">
+                <ul class="menu menu-horizontal px-1 gap-2">
+                    <li><a href="{% url 'home' %}" class="font-semibold hover:text-red-500 transition-colors">Inicio</a></li>
+                    <li><a href="{% url 'moto-lista' %}" class="font-semibold hover:text-red-500 transition-colors">Motos</a></li>
+                    <li><a href="#servicios" class="font-semibold hover:text-red-500 transition-colors">Servicios</a></li>
+                    <li><a href="#contacto" class="font-semibold hover:text-red-500 transition-colors">Contacto</a></li>
+                </ul>
+            </div>
+            
+            <div class="navbar-end gap-2">
+                <a href="https://wa.me/593123456789" target="_blank" class="btn btn-yamaha btn-sm gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+                    </svg>
+                    <span class="hidden md:inline">WhatsApp</span>
+                </a>
             </div>
         </div>
-    </nav>
+    </div>
 
-    <!-- Content -->
+    <!-- Main Content -->
     <main>
         {% block content %}{% endblock %}
     </main>
 
-    <!-- Footer -->
-    <footer class="bg-gray-900 text-white mt-16">
-        <div class="container mx-auto px-4 py-8">
-            <div class="text-center">
-                <p class="text-gray-400">&copy; 2026 Yamaha Motos. Todos los derechos reservados.</p>
+    <!-- Premium Footer -->
+    <footer class="footer footer-center bg-yamaha-black text-white p-10">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8 max-w-7xl w-full text-left" data-aos="fade-up">
+            <!-- Company Info -->
+            <div>
+                <h3 class="text-lg font-bold mb-4 text-gradient">Yamaha Motorcycles</h3>
+                <p class="text-gray-400 leading-relaxed">
+                    Distribuidor oficial de motocicletas Yamaha. 
+                    Más de 30 años de experiencia en el mercado.
+                </p>
+            </div>
+            
+            <!-- Quick Links -->
+            <div>
+                <h3 class="text-lg font-bold mb-4">Enlaces Rápidos</h3>
+                <ul class="space-y-2">
+                    <li><a href="{% url 'home' %}" class="link link-hover text-gray-400 hover:text-red-500 transition-colors">Inicio</a></li>
+                    <li><a href="{% url 'moto-lista' %}" class="link link-hover text-gray-400 hover:text-red-500 transition-colors">Catálogo</a></li>
+                    <li><a href="#servicios" class="link link-hover text-gray-400 hover:text-red-500 transition-colors">Servicios</a></li>
+                    <li><a href="#nosotros" class="link link-hover text-gray-400 hover:text-red-500 transition-colors">Nosotros</a></li>
+                </ul>
+            </div>
+            
+            <!-- Categories -->
+            <div>
+                <h3 class="text-lg font-bold mb-4">Categorías</h3>
+                <ul class="space-y-2">
+                    <li><a href="{% url 'moto-lista' %}?categoria=sport" class="link link-hover text-gray-400 hover:text-red-500 transition-colors">Sport</a></li>
+                    <li><a href="{% url 'moto-lista' %}?categoria=touring" class="link link-hover text-gray-400 hover:text-red-500 transition-colors">Touring</a></li>
+                    <li><a href="{% url 'moto-lista' %}?categoria=naked" class="link link-hover text-gray-400 hover:text-red-500 transition-colors">Naked</a></li>
+                    <li><a href="{% url 'moto-lista' %}?categoria=adventure" class="link link-hover text-gray-400 hover:text-red-500 transition-colors">Adventure</a></li>
+                </ul>
+            </div>
+            
+            <!-- Contact -->
+            <div>
+                <h3 class="text-lg font-bold mb-4">Contacto</h3>
+                <ul class="space-y-2 text-gray-400">
+                    <li class="flex items-center gap-2">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
+                        </svg>
+                        +593 123 456 789
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                        </svg>
+                        info@yamaha.com
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                        </svg>
+                        Guayaquil, Ecuador
+                    </li>
+                </ul>
             </div>
         </div>
+        
+        <div class="divider opacity-20"></div>
+        
+        <div>
+            <p class="text-gray-500">&copy; 2026 Yamaha Motorcycles. Todos los derechos reservados.</p>
+        </div>
     </footer>
+
+    <!-- WhatsApp Floating Button with Alpine.js -->
+    <a href="https://wa.me/593123456789" 
+       target="_blank" 
+       class="whatsapp-float" 
+       aria-label="Contactar por WhatsApp"
+       x-data="{ show: false }"
+       x-show="show"
+       x-transition:enter="transition ease-out duration-300"
+       x-transition:enter-start="opacity-0 transform scale-0"
+       x-transition:enter-end="opacity-100 transform scale-100"
+       @scroll.window="show = window.pageYOffset > 300">
+        <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+            <path d="M16 0C7.164 0 0 7.164 0 16c0 2.828.736 5.484 2.016 7.792L0 32l8.384-2.016C10.692 31.264 13.348 32 16 32c8.836 0 16-7.164 16-16S24.836 0 16 0zm0 29.344c-2.548 0-4.94-.708-7.012-1.932l-.5-.296-5.188 1.248 1.248-5.188-.296-.5C2.708 20.94 2 18.548 2 16 2 8.268 8.268 2 16 2s14 6.268 14 14-6.268 13.344-14 13.344zm7.708-10.012c-.42-.212-2.492-1.228-2.876-1.368-.384-.14-.664-.212-.944.212-.28.424-1.084 1.368-1.328 1.648-.244.28-.488.316-.908.104-.42-.212-1.772-.652-3.376-2.08-1.248-1.112-2.088-2.484-2.332-2.904-.244-.42-.024-.648.184-.856.188-.188.42-.488.632-.732.212-.244.28-.42.42-.7.14-.28.07-.524-.036-.732-.104-.212-.944-2.268-1.292-3.108-.34-.82-.684-.708-.944-.72-.244-.012-.524-.012-.804-.012s-.732.104-1.116.524c-.384.42-1.464 1.432-1.464 3.488s1.5 4.048 1.708 4.328c.212.28 2.944 4.496 7.132 6.304.996.432 1.772.688 2.376.88.996.316 1.904.272 2.62.164.8-.12 2.492-1.02 2.844-2.004.352-.984.352-1.828.244-2.004-.104-.176-.384-.28-.804-.492z"/>
+        </svg>
+    </a>
+
+    <!-- Initialize AOS -->
+    <script>
+        AOS.init({
+            duration: 800,
+            easing: 'ease-out-cubic',
+            once: true,
+            offset: 100
+        });
+    </script>
+
+    <!-- Custom JavaScript -->
+    <script src="{% static 'js/main.js' %}"></script>
+    {% block extra_js %}{% endblock %}
 </body>
 </html>

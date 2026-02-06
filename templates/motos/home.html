@@ -1,111 +1,143 @@
 {% extends 'base.html' %}
 
-{% block title %}Yamaha Motos - Inicio{% endblock %}
+{% block title %}Yamaha Motorcycles - Inicio{% endblock %}
 
 {% load static %}
 
 {% block content %}
-<!-- Hero Section con Banner -->
-<section class="relative h-[600px] md:h-[700px] overflow-hidden">
-    <!-- Banner de fondo -->
-    <div class="absolute inset-0">
-        <img src="{% static 'images/banner.jpg' %}"
-             alt="Yamaha Motos Banner"
-             class="w-full h-full object-cover parallax-slow scale-105">
-        <!-- Overlay con gradiente -->
-        <div class="absolute inset-0 bg-gradient-to-r from-black via-transparent to-black opacity-60"></div>
-        <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black opacity-70"></div>
-    </div>
 
-    <!-- Contenido sobre el banner -->
-    <div class="relative z-10 container mx-auto px-4 h-full flex flex-col justify-center items-center text-center text-white">
-        <h1 class="text-5xl md:text-8xl font-black mb-6 drop-shadow-2xl animate-fade-in-up tracking-tight">
-            YAMAHA MOTOS
-        </h1>
-        <p class="text-xl md:text-3xl mb-10 font-light drop-shadow-lg animate-fade-in-up animate-delay-1 max-w-3xl">
-            Velocidad, estilo y potencia en cada curva
-        </p>
-        <a href="{% url 'moto-lista' %}"
-           class="animate-fade-in-up animate-delay-2 inline-block bg-white text-gray-900 px-12 py-5 rounded-full font-bold text-lg hover:bg-gray-100 transition-all duration-300 transform hover:scale-110 hover:shadow-2xl">
-            Explorar Catálogo →
-        </a>
+<!-- Hero Section - Premium Level -->
+<div class="hero min-h-screen relative overflow-hidden" style="background-image: url({% static 'images/hero-banner.jpg' %});">
+    <div class="hero-overlay bg-gradient-to-r from-black/80 via-black/60 to-black/40"></div>
+    
+    <!-- Animated Background Elements -->
+    <div class="absolute inset-0 overflow-hidden pointer-events-none">
+        <div class="absolute top-20 left-10 w-72 h-72 bg-red-500/10 rounded-full blur-3xl animate-pulse"></div>
+        <div class="absolute bottom-20 right-10 w-96 h-96 bg-red-600/10 rounded-full blur-3xl animate-pulse" style="animation-delay: 1s;"></div>
     </div>
-
-    <!-- Scroll indicator -->
-    <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
-        <svg class="w-8 h-8 text-white opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    
+    <div class="hero-content text-center text-white relative z-10">
+        <div class="max-w-5xl">
+            <div class="hero-text">
+                <h1 class="mb-6 text-6xl md:text-8xl font-black uppercase tracking-tight leading-none" 
+                    data-aos="fade-up">
+                    Encuentra tu<br>
+                    <span class="text-gradient">moto ideal</span>
+                </h1>
+                <p class="mb-10 text-xl md:text-3xl font-light max-w-3xl mx-auto" 
+                   data-aos="fade-up" 
+                   data-aos-delay="200">
+                    Con el mejor servicio y garantía oficial Yamaha
+                </p>
+                <div class="flex flex-wrap gap-4 justify-center" data-aos="fade-up" data-aos-delay="300">
+                    <a href="{% url 'moto-lista' %}" class="btn btn-yamaha btn-lg gap-2 text-lg">
+                        Ver Catálogo Completo
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                        </svg>
+                    </a>
+                    <a href="#servicios" class="btn btn-outline btn-lg gap-2 text-lg text-white border-white hover:bg-white hover:text-black">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        Más Información
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Scroll Indicator -->
+    <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
+        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
         </svg>
     </div>
-</section>
+</div>
 
-<!-- Categorías -->
-<section class="py-20 bg-gradient-to-b from-white to-gray-50">
+<!-- Featured Motorcycles Section - Interactive with Alpine.js -->
+<section class="py-24 bg-gradient-to-b from-base-100 to-base-200" x-data="{ activeFilter: 'all' }">
     <div class="container mx-auto px-4">
-        <h2 class="text-4xl md:text-5xl font-black text-center mb-4 text-gray-900">
-            Explora por Categoría
-        </h2>
-        <p class="text-center text-gray-600 mb-12 text-lg">
-            Encuentra la moto perfecta para tu estilo de vida
-        </p>
-        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
-            {% for codigo, nombre in categorias %}
-            <a href="{% url 'moto-lista' %}?categoria={{ codigo }}"
-               class="group relative bg-gradient-to-br from-purple-600 to-indigo-700 text-white p-8 rounded-2xl text-center hover:shadow-2xl transition-all duration-300 transform hover:scale-110 hover:-translate-y-2 overflow-hidden">
-                <!-- Efecto de brillo al hover -->
-                <div class="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
-
-                <div class="relative z-10">
-                    <div class="text-5xl mb-3">🏍️</div>
-                    <div class="font-bold text-lg">{{ nombre }}</div>
-                </div>
-            </a>
-            {% endfor %}
+        <div class="text-center mb-16" data-aos="fade-up">
+            <div class="badge badge-error badge-lg mb-4 font-bold">Nuestro Catálogo</div>
+            <h2 class="text-5xl md:text-6xl font-black mb-6">
+                Modelos <span class="text-gradient">Destacados</span>
+            </h2>
+            <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+                Descubre nuestra selección de motocicletas más populares
+            </p>
         </div>
-    </div>
-</section>
-
-<!-- Motos Destacadas -->
-<section class="py-20 bg-white">
-    <div class="container mx-auto px-4">
-        <h2 class="text-4xl md:text-5xl font-black text-center mb-4 text-gray-900">
-            Motos Destacadas
-        </h2>
-        <p class="text-center text-gray-600 mb-12 text-lg">
-            Las mejores opciones para empezar tu aventura
-        </p>
 
         {% if motos_destacadas %}
+        <!-- Filter Tabs with Alpine.js -->
+        <div class="flex flex-wrap justify-center gap-3 mb-12" data-aos="fade-up" data-aos-delay="100">
+            <button @click="activeFilter = 'all'" 
+                    :class="activeFilter === 'all' ? 'btn-yamaha' : 'btn-outline'" 
+                    class="btn btn-sm">
+                Todas
+            </button>
+            {% for codigo, nombre in categorias %}
+            <button @click="activeFilter = '{{ codigo }}'" 
+                    :class="activeFilter === '{{ codigo }}' ? 'btn-yamaha' : 'btn-outline'" 
+                    class="btn btn-sm">
+                {{ nombre }}
+            </button>
+            {% endfor %}
+        </div>
+
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {% for moto in motos_destacadas %}
-            <div class="group bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-3">
-                <div class="relative h-56 bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center overflow-hidden">
+            <div class="card glass-card shadow-2xl card-hover" 
+                 data-aos="fade-up" 
+                 data-aos-delay="{{ forloop.counter|add:'00' }}"
+                 x-show="activeFilter === 'all' || activeFilter === '{{ moto.categoria }}'"
+                 x-transition:enter="transition ease-out duration-300"
+                 x-transition:enter-start="opacity-0 transform scale-90"
+                 x-transition:enter-end="opacity-100 transform scale-100">
+                <figure class="relative h-72 bg-gradient-to-br from-base-200 to-base-300 img-zoom">
                     {% if moto.imagen %}
-                    <img src="{{ moto.imagen.url }}" alt="{{ moto.nombre }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    <img src="{{ moto.imagen.url }}" alt="{{ moto.nombre }}" class="w-full h-full object-cover">
                     {% else %}
-                    <span class="text-6xl group-hover:scale-110 transition-transform duration-300">🏍️</span>
-                    {% endif %}
-                    <!-- Badge de categoría -->
-                    <div class="absolute top-4 right-4 bg-purple-600 text-white px-3 py-1 rounded-full text-xs font-bold">
-                        {{ moto.get_categoria_display }}
+                    <div class="flex items-center justify-center h-full">
+                        <svg class="w-24 h-24 opacity-20" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                        </svg>
                     </div>
-                </div>
-                <div class="p-6">
-                    <h3 class="text-2xl font-bold mb-2 text-gray-900 group-hover:text-purple-600 transition-colors">
+                    {% endif %}
+                    <div class="absolute top-4 right-4">
+                        <div class="badge badge-error font-bold shadow-lg">
+                            {{ moto.get_categoria_display }}
+                        </div>
+                    </div>
+                    <div class="absolute top-4 left-4">
+                        <div class="badge badge-success font-bold shadow-lg">
+                            Disponible
+                        </div>
+                    </div>
+                </figure>
+                <div class="card-body">
+                    <h3 class="card-title text-2xl font-black">
                         {{ moto.nombre }}
                     </h3>
-                    <p class="text-gray-600 mb-4 flex items-center">
-                        <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
-                            <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/>
-                        </svg>
-                        {{ moto.cilindrada }}cc
-                    </p>
-                    <div class="flex items-center justify-between">
-                        <span class="text-3xl font-black text-purple-600">{{ moto.precio_formateado }}</span>
-                        <a href="{% url 'moto-detail' moto.pk %}"
-                           class="bg-purple-600 text-white px-6 py-3 rounded-xl font-bold hover:bg-purple-700 transition-all transform hover:scale-105 shadow-md">
-                            Ver Más
+                    <div class="flex items-center gap-3 text-gray-600 mb-4">
+                        <div class="badge badge-outline gap-2">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
+                                <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/>
+                            </svg>
+                            {{ moto.cilindrada }}cc
+                        </div>
+                    </div>
+                    <div class="card-actions justify-between items-center mt-auto">
+                        <div>
+                            <div class="text-sm text-gray-500">Desde</div>
+                            <span class="text-4xl font-black text-gradient">{{ moto.precio_formateado }}</span>
+                        </div>
+                        <a href="{% url 'moto-detail' moto.pk %}" class="btn btn-yamaha gap-2">
+                            Ver Detalles
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                            </svg>
                         </a>
                     </div>
                 </div>
@@ -113,11 +145,201 @@
             {% endfor %}
         </div>
         {% else %}
-        <div class="text-center text-gray-500 py-12">
-            <p class="text-xl">No hay motos disponibles por el momento.</p>
-            <p class="mt-2">Pronto agregaremos nuestro catálogo completo.</p>
+        <div class="alert alert-info shadow-2xl max-w-2xl mx-auto glass-card" data-aos="fade-up">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <div>
+                <h3 class="font-bold text-lg">No hay motos disponibles</h3>
+                <div class="text-sm">Pronto agregaremos nuestro catálogo completo. ¡Mantente atento!</div>
+            </div>
         </div>
         {% endif %}
     </div>
 </section>
+
+<!-- Categories Section - Interactive Grid -->
+<section class="py-24 bg-base-100">
+    <div class="container mx-auto px-4">
+        <div class="text-center mb-16" data-aos="fade-up">
+            <div class="badge badge-error badge-lg mb-4 font-bold">Explora</div>
+            <h2 class="text-5xl md:text-6xl font-black mb-6">
+                Nuestras <span class="text-gradient">Categorías</span>
+            </h2>
+            <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+                Encuentra la moto perfecta para tu estilo de vida
+            </p>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+            {% for codigo, nombre in categorias %}
+            <a href="{% url 'moto-lista' %}?categoria={{ codigo }}" 
+               class="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-base-200 to-base-300 p-8 text-center hover:shadow-2xl transition-all duration-300 category-card"
+               data-aos="zoom-in" 
+               data-aos-delay="{{ forloop.counter|add:'00' }}">
+                <div class="relative z-10">
+                    <svg class="w-16 h-16 mb-4 mx-auto group-hover:scale-110 transition-transform duration-300" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                    </svg>
+                    <h3 class="font-bold text-lg group-hover:text-white transition-colors">{{ nombre }}</h3>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Services Section - Premium Cards -->
+<section class="py-24 bg-gradient-to-b from-base-100 to-base-200" id="servicios">
+    <div class="container mx-auto px-4">
+        <div class="text-center mb-16" data-aos="fade-up">
+            <div class="badge badge-error badge-lg mb-4 font-bold">Servicios</div>
+            <h2 class="text-5xl md:text-6xl font-black mb-6">
+                Todo lo que <span class="text-gradient">Necesitas</span>
+            </h2>
+            <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+                Soluciones completas para tu motocicleta Yamaha
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <!-- Service 1 -->
+            <div class="card glass-card shadow-xl hover:shadow-2xl transition-all duration-300 card-hover" data-aos="fade-up" data-aos-delay="100">
+                <div class="card-body items-center text-center">
+                    <div class="w-20 h-20 rounded-full bg-gradient-to-br from-red-500 to-red-600 flex items-center justify-center mb-4 shadow-lg">
+                        <svg class="w-10 h-10 text-white" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                        </svg>
+                    </div>
+                    <h3 class="card-title text-xl font-black">Venta de Motos</h3>
+                    <p class="text-gray-600">Amplio catálogo con garantía oficial y financiamiento disponible</p>
+                </div>
+            </div>
+
+            <!-- Service 2 -->
+            <div class="card glass-card shadow-xl hover:shadow-2xl transition-all duration-300 card-hover" data-aos="fade-up" data-aos-delay="200">
+                <div class="card-body items-center text-center">
+                    <div class="w-20 h-20 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center mb-4 shadow-lg">
+                        <svg class="w-10 h-10 text-white" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
+                        </svg>
+                    </div>
+                    <h3 class="card-title text-xl font-black">Servicio Técnico</h3>
+                    <p class="text-gray-600">Mantenimiento profesional con técnicos certificados Yamaha</p>
+                </div>
+            </div>
+
+            <!-- Service 3 -->
+            <div class="card glass-card shadow-xl hover:shadow-2xl transition-all duration-300 card-hover" data-aos="fade-up" data-aos-delay="300">
+                <div class="card-body items-center text-center">
+                    <div class="w-20 h-20 rounded-full bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center mb-4 shadow-lg">
+                        <svg class="w-10 h-10 text-white" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94L14.4 2.81c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/>
+                        </svg>
+                    </div>
+                    <h3 class="card-title text-xl font-black">Repuestos Originales</h3>
+                    <p class="text-gray-600">Piezas genuinas Yamaha con garantía de fábrica</p>
+                </div>
+            </div>
+
+            <!-- Service 4 -->
+            <div class="card glass-card shadow-xl hover:shadow-2xl transition-all duration-300 card-hover" data-aos="fade-up" data-aos-delay="400">
+                <div class="card-body items-center text-center">
+                    <div class="w-20 h-20 rounded-full bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center mb-4 shadow-lg">
+                        <svg class="w-10 h-10 text-white" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/>
+                        </svg>
+                    </div>
+                    <h3 class="card-title text-xl font-black">Financiamiento</h3>
+                    <p class="text-gray-600">Planes flexibles adaptados a tu presupuesto</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Trust Section - Animated Stats -->
+<section class="py-24 bg-yamaha-gradient text-white relative overflow-hidden">
+    <!-- Background Pattern -->
+    <div class="absolute inset-0 opacity-10">
+        <div class="absolute top-0 left-0 w-full h-full" style="background-image: url('data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'0.4\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');"></div>
+    </div>
+    
+    <div class="container mx-auto px-4 relative z-10">
+        <div class="text-center mb-16" data-aos="fade-up">
+            <div class="badge badge-outline border-white text-white badge-lg mb-4 font-bold">Confianza</div>
+            <h2 class="text-5xl md:text-6xl font-black mb-6">
+                Puedes Confiar en Nosotros
+            </h2>
+            <p class="text-xl opacity-90 max-w-2xl mx-auto">
+                Más de 30 años siendo el distribuidor oficial de Yamaha
+            </p>
+        </div>
+
+        <div class="stats stats-vertical lg:stats-horizontal shadow-2xl w-full bg-white/10 backdrop-blur-lg border border-white/20" data-aos="zoom-in">
+            <div class="stat place-items-center">
+                <div class="stat-title text-white/70 font-semibold">Años de Experiencia</div>
+                <div class="stat-value text-white stat-number text-6xl">+30</div>
+                <div class="stat-desc text-white/60">Desde 1994</div>
+            </div>
+
+            <div class="stat place-items-center">
+                <div class="stat-title text-white/70 font-semibold">Clientes Satisfechos</div>
+                <div class="stat-value text-white stat-number text-6xl">+5K</div>
+                <div class="stat-desc text-white/60">Y contando</div>
+            </div>
+
+            <div class="stat place-items-center">
+                <div class="stat-title text-white/70 font-semibold">Calificación</div>
+                <div class="stat-value text-white stat-number text-6xl">4.8★</div>
+                <div class="stat-desc text-white/60">De 5 estrellas</div>
+            </div>
+
+            <div class="stat place-items-center">
+                <div class="stat-title text-white/70 font-semibold">Recomendación</div>
+                <div class="stat-value text-white stat-number text-6xl">98%</div>
+                <div class="stat-desc text-white/60">Nos recomiendan</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section - Premium -->
+<section class="py-24 bg-base-100" id="contacto">
+    <div class="container mx-auto px-4">
+        <div class="hero bg-yamaha-gradient rounded-3xl shadow-2xl overflow-hidden relative" data-aos="zoom-in">
+            <!-- Background Pattern -->
+            <div class="absolute inset-0 opacity-10">
+                <div class="absolute top-0 left-0 w-full h-full" style="background-image: url('data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'0.4\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');"></div>
+            </div>
+            
+            <div class="hero-content text-center py-20 relative z-10">
+                <div class="max-w-4xl text-white">
+                    <h2 class="text-5xl md:text-6xl font-black mb-6">
+                        ¿Listo para tu próxima<br>aventura?
+                    </h2>
+                    <p class="text-2xl mb-10 opacity-95">
+                        Visítanos o contáctanos para más información
+                    </p>
+                    <div class="flex flex-wrap gap-4 justify-center">
+                        <a href="{% url 'moto-lista' %}" class="btn btn-lg bg-white text-red-600 hover:bg-gray-100 border-0 gap-2 shadow-xl">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                            </svg>
+                            Ver Catálogo Completo
+                        </a>
+                        <a href="https://wa.me/593123456789" target="_blank" class="btn btn-lg btn-outline text-white hover:bg-white hover:text-red-600 border-2 border-white gap-2 shadow-xl">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+                            </svg>
+                            Contactar por WhatsApp
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
 {% endblock %}
