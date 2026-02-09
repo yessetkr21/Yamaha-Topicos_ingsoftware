@@ -79,5 +79,7 @@ class Moto(models.Model):
 
     @property
     def precio_formateado(self):
-        """Retorna el precio formateado con símbolo de dólar"""
-        return f"${self.precio:,.2f}"
+        """Retorna el precio formateado en pesos colombianos (COP)"""
+        # Formato colombiano: puntos como separadores de miles, sin decimales
+        precio_str = f"{int(self.precio):,}".replace(',', '.')
+        return f"${precio_str}"

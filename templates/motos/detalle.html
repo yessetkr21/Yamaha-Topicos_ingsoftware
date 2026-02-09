@@ -49,6 +49,42 @@
                     {% elif moto.nombre == "MT-09 SP" %}
                     <img src="{% static 'images/motos/mt09/GRIS.avif' %}" alt="MT-09 SP">
 
+                    {% elif moto.nombre == "MT-07" %}
+                    <div x-data="{ color: 'azul' }" style="width:100%;text-align:center;">
+                        <div style="position:relative;height:300px;display:flex;align-items:center;justify-content:center;">
+                            <img x-show="color === 'azul'" src="{% static 'images/motos/mt07/azulmt07}.avif' %}" alt="MT-07 Azul" style="max-height:100%;object-fit:contain;">
+                            <img x-show="color === 'negro'" src="{% static 'images/motos/mt07/negromt07.webp' %}" alt="MT-07 Negro" style="max-height:100%;object-fit:contain;">
+                        </div>
+                        <div class="color-dots" style="justify-content:center;margin-top:16px;">
+                            <button @click="color = 'azul'" :class="color === 'azul' ? 'active' : ''" class="color-dot" style="background:#0066CC;"></button>
+                            <button @click="color = 'negro'" :class="color === 'negro' ? 'active' : ''" class="color-dot" style="background:#1A1A1A;"></button>
+                        </div>
+                    </div>
+
+                    {% elif moto.nombre == "YCZ 110" %}
+                    <div x-data="{ color: 'azul' }" style="width:100%;text-align:center;">
+                        <div style="position:relative;height:300px;display:flex;align-items:center;justify-content:center;">
+                            <img x-show="color === 'azul'" src="{% static 'images/motos/ycz110/azul-oscuro.avif' %}" alt="YCZ 110 Azul" style="max-height:100%;object-fit:contain;">
+                            <img x-show="color === 'rojo'" src="{% static 'images/motos/ycz110/rojo.png' %}" alt="YCZ 110 Rojo" style="max-height:100%;object-fit:contain;">
+                        </div>
+                        <div class="color-dots" style="justify-content:center;margin-top:16px;">
+                            <button @click="color = 'azul'" :class="color === 'azul' ? 'active' : ''" class="color-dot" style="background:#1E3A8A;"></button>
+                            <button @click="color = 'rojo'" :class="color === 'rojo' ? 'active' : ''" class="color-dot" style="background:#DC2626;"></button>
+                        </div>
+                    </div>
+
+                    {% elif moto.nombre == "YZF-R7" %}
+                    <div x-data="{ color: 'azul' }" style="width:100%;text-align:center;">
+                        <div style="position:relative;height:300px;display:flex;align-items:center;justify-content:center;">
+                            <img x-show="color === 'azul'" src="{% static 'images/motos/r7/azulr7.avif' %}" alt="YZF-R7 Azul" style="max-height:100%;object-fit:contain;">
+                            <img x-show="color === 'negro'" src="{% static 'images/motos/r7/R7negro.avif' %}" alt="YZF-R7 Negro" style="max-height:100%;object-fit:contain;">
+                        </div>
+                        <div class="color-dots" style="justify-content:center;margin-top:16px;">
+                            <button @click="color = 'azul'" :class="color === 'azul' ? 'active' : ''" class="color-dot" style="background:#0066CC;"></button>
+                            <button @click="color = 'negro'" :class="color === 'negro' ? 'active' : ''" class="color-dot" style="background:#1A1A1A;"></button>
+                        </div>
+                    </div>
+
                     {% elif moto.imagen %}
                     <img src="{{ moto.imagen.url }}" alt="{{ moto.nombre }}">
                     {% else %}
@@ -69,7 +105,10 @@
                         {% endif %}
                     </div>
 
-                    <div class="detail-price">{{ moto.precio_formateado }}</div>
+                    <div class="detail-price">
+                        {{ moto.precio_formateado }}
+                        <div style="font-size:14px;color:#888;margin-top:4px;font-weight:normal;">IVA incluido</div>
+                    </div>
 
                     <div class="detail-specs">
                         <div class="detail-spec-row">

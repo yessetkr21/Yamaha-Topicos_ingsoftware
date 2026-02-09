@@ -81,6 +81,42 @@
                             <img src="{% static 'images/motos/mt09/GRIS.avif' %}" alt="MT-09 SP" class="moto-main-img">
                         </div>
 
+                        {% elif moto.nombre == "MT-07" %}
+                        <div x-data="{ color: 'azul' }" class="color-switcher-card">
+                            <div class="moto-img-container">
+                                <img x-show="color === 'azul'" src="{% static 'images/motos/mt07/azulmt07}.avif' %}" alt="MT-07 Azul" class="moto-main-img">
+                                <img x-show="color === 'negro'" src="{% static 'images/motos/mt07/negromt07.webp' %}" alt="MT-07 Negro" class="moto-main-img">
+                            </div>
+                            <div class="color-dots">
+                                <button @click="color = 'azul'" :class="color === 'azul' ? 'active' : ''" class="color-dot" style="background:#0066CC;" title="Azul"></button>
+                                <button @click="color = 'negro'" :class="color === 'negro' ? 'active' : ''" class="color-dot" style="background:#1A1A1A;" title="Negro"></button>
+                            </div>
+                        </div>
+
+                        {% elif moto.nombre == "YCZ 110" %}
+                        <div x-data="{ color: 'azul' }" class="color-switcher-card">
+                            <div class="moto-img-container">
+                                <img x-show="color === 'azul'" src="{% static 'images/motos/ycz110/azul-oscuro.avif' %}" alt="YCZ 110 Azul" class="moto-main-img">
+                                <img x-show="color === 'rojo'" src="{% static 'images/motos/ycz110/rojo.png' %}" alt="YCZ 110 Rojo" class="moto-main-img">
+                            </div>
+                            <div class="color-dots">
+                                <button @click="color = 'azul'" :class="color === 'azul' ? 'active' : ''" class="color-dot" style="background:#1E3A8A;" title="Azul"></button>
+                                <button @click="color = 'rojo'" :class="color === 'rojo' ? 'active' : ''" class="color-dot" style="background:#DC2626;" title="Rojo"></button>
+                            </div>
+                        </div>
+
+                        {% elif moto.nombre == "YZF-R7" %}
+                        <div x-data="{ color: 'azul' }" class="color-switcher-card">
+                            <div class="moto-img-container">
+                                <img x-show="color === 'azul'" src="{% static 'images/motos/r7/azulr7.avif' %}" alt="YZF-R7 Azul" class="moto-main-img">
+                                <img x-show="color === 'negro'" src="{% static 'images/motos/r7/R7negro.avif' %}" alt="YZF-R7 Negro" class="moto-main-img">
+                            </div>
+                            <div class="color-dots">
+                                <button @click="color = 'azul'" :class="color === 'azul' ? 'active' : ''" class="color-dot" style="background:#0066CC;" title="Azul Racing"></button>
+                                <button @click="color = 'negro'" :class="color === 'negro' ? 'active' : ''" class="color-dot" style="background:#1A1A1A;" title="Negro Tech"></button>
+                            </div>
+                        </div>
+
                         {% else %}
                         <div class="moto-img-container">
                             {% if moto.imagen %}
@@ -133,8 +169,11 @@
 
                         <!-- Price -->
                         <div class="moto-price-row">
-                            <span class="price-label">Ahora</span>
-                            <span class="price-value">{{ moto.precio_formateado }}</span>
+                            <div>
+                                <span class="price-label">Ahora</span>
+                                <span class="price-value">{{ moto.precio_formateado }}</span>
+                                <div style="font-size:11px;color:#888;margin-top:2px;">IVA incluido</div>
+                            </div>
                         </div>
                     </div>
 
@@ -225,6 +264,7 @@
                 <div class="showcase-price-box">
                     <span class="showcase-price-label">Desde</span>
                     <span class="showcase-price">$ 16.800.000</span>
+                    <div style="font-size:13px;color:#888;margin-top:4px;">IVA incluido</div>
                 </div>
 
                 <div class="showcase-actions">
