@@ -23,7 +23,10 @@
       "Bash(docker exec:*)",
       "Bash(curl:*)",
       "Bash(docker restart:*)",
-      "Bash(tree:*)"
+      "Bash(tree:*)",
+      "Bash(exit 0)",
+      "Bash(cmd /c \"rmdir /s /q imagenes-moto 2>nul & del scrape_motos.py 2>nul & echo Archivos eliminados\")",
+      "Bash(dir:*)"
     ]
   }
 }
