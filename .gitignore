@@ -31,9 +31,11 @@ db.sqlite3-journal
 staticfiles/
 static_root/
 
-# Media files (excepto banner)
+# Media files (excepto banner e imágenes de motos)
 media/*
 !media/.gitkeep
+!media/motos/
+!media/motos/**
 
 # Environment variables
 .env

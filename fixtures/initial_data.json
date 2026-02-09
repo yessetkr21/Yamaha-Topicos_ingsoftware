@@ -1,0 +1,92 @@
+[
+{
+  "model": "motos.moto",
+  "pk": 7,
+  "fields": {
+    "nombre": "NMAX 155",
+    "categoria": "scooter",
+    "precio": "16800000.00",
+    "cilindrada": 155,
+    "descripcion": "Elegancia urbana con tecnologia de punta. El scooter perfecto para la ciudad con potente motor de 155cc, diseno aerodinamico y maximo confort.",
+    "imagen": "",
+    "disponible": true,
+    "created_at": "2026-02-09T17:35:30.944Z",
+    "updated_at": "2026-02-09T22:22:38.861Z"
+  }
+},
+{
+  "model": "motos.moto",
+  "pk": 8,
+  "fields": {
+    "nombre": "MT-09 SP",
+    "categoria": "naked",
+    "precio": "72000000.00",
+    "cilindrada": 890,
+    "descripcion": "La bestia naked de Yamaha. Motor de 3 cilindros en linea CP3 de 890cc, chasis de aluminio, suspension KYB y frenos Brembo. Pura adrenalina.",
+    "imagen": "",
+    "disponible": true,
+    "created_at": "2026-02-09T17:36:02.884Z",
+    "updated_at": "2026-02-09T22:22:38.892Z"
+  }
+},
+{
+  "model": "motos.moto",
+  "pk": 9,
+  "fields": {
+    "nombre": "Aerox 155",
+    "categoria": "scooter",
+    "precio": "12700000.00",
+    "cilindrada": 155,
+    "descripcion": "Scooter deportivo con ADN R-Series. Motor VVA 155cc, diseno agresivo inspirado en YZF-R1, y tecnologia LED. Ideal para jovenes urbanos.",
+    "imagen": "",
+    "disponible": true,
+    "created_at": "2026-02-09T17:36:02.891Z",
+    "updated_at": "2026-02-09T22:22:38.868Z"
+  }
+},
+{
+  "model": "motos.moto",
+  "pk": 10,
+  "fields": {
+    "nombre": "YCZ 110",
+    "categoria": "scooter",
+    "precio": "6500000.00",
+    "cilindrada": 110,
+    "descripcion": "Compacta y eficiente. La YCZ 110 es perfecta para desplazamientos urbanos, con bajo consumo de combustible y excelente maniobrabilidad. Ideal para estudiantes y ciudad.",
+    "imagen": "",
+    "disponible": true,
+    "created_at": "2026-02-09T22:05:37.348Z",
+    "updated_at": "2026-02-09T22:22:38.875Z"
+  }
+},
+{
+  "model": "motos.moto",
+  "pk": 11,
+  "fields": {
+    "nombre": "YZF-R7",
+    "categoria": "sport",
+    "precio": "58000000.00",
+    "cilindrada": 689,
+    "descripcion": "Supersport de nivel mundial. Motor bicilíndrico CP2 de 689cc, chasis de aluminio inspirado en YZF-R1, y tecnología de competición. Disponible en Racing Blue y Tech Black.",
+    "imagen": "",
+    "disponible": true,
+    "created_at": "2026-02-09T22:10:26.120Z",
+    "updated_at": "2026-02-09T22:22:38.901Z"
+  }
+},
+{
+  "model": "motos.moto",
+  "pk": 13,
+  "fields": {
+    "nombre": "MT-07",
+    "categoria": "naked",
+    "precio": "50000000.00",
+    "cilindrada": 689,
+    "descripcion": "La naked mas versatil de Yamaha. Motor bicilindrico CP2 de 689cc, ligera y agil con excelente torque en todo el rango. Perfecta para ciudad y carretera.",
+    "imagen": "",
+    "disponible": true,
+    "created_at": "2026-02-09T22:16:18.244Z",
+    "updated_at": "2026-02-09T22:22:38.883Z"
+  }
+}
+]
